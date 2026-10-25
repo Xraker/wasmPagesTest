@@ -1,1 +1,157 @@
-<!doctypehtml><html lang=tr><head><meta charset=utf-8><meta content="width=device-width,initial-scale=1"name=viewport><meta content="no-cache, no-store, must-revalidate"http-equiv=Cache-Control><meta content=no-cache http-equiv=Pragma><meta content=0 http-equiv=Expires><title>rayweb</title><link href=data:, rel=icon><style>body,html{margin:0;padding:0;width:100%;height:100%;background:#12141a;overflow:hidden}canvas{display:block;width:100%;height:100%;border:0;outline:0;background:#12141a}</style></head><body><canvas id=canvas oncontextmenu=event.preventDefault() tabindex=-1></canvas><input autocapitalize=off autocomplete=off autocorrect=off id=kbtrap style=position:absolute;opacity:0;height:1px;width:1px;top:0;left:0 tabindex=-1><script>!function(){var e=document.getElementById("canvas"),n=document.getElementById("kbtrap");e.addEventListener("touchend",(function(e){n.focus()}),!1),n.addEventListener("input",(function(e){for(var t=n.value,d=0;d<t.length;d++){var a=t[d];document.dispatchEvent(new KeyboardEvent("keydown",{key:a,bubbles:!0})),document.dispatchEvent(new KeyboardEvent("keypress",{key:a,bubbles:!0})),document.dispatchEvent(new KeyboardEvent("keyup",{key:a,bubbles:!0}))}n.value=""})),n.addEventListener("keydown",(function(e){"Backspace"!==e.key&&"Enter"!==e.key||document.dispatchEvent(new KeyboardEvent("keydown",{key:e.key,bubbles:!0}))}))}()</script><script>var Module={canvas:document.getElementById("canvas"),locateFile:function(n,t){return n.endsWith(".wasm")?t+n+"?v="+Date.now():t+n}};!function(){if("localhost"===location.hostname||"127.0.0.1"===location.hostname){var n=null;setInterval((function(){fetch(".reload",{cache:"no-store"}).then((function(n){return n.ok?n.text():null})).then((function(t){null!==t&&(null!==n&&t!==n&&location.reload(),n=t)})).catch((function(){}))}),700)}}(),function(){var n=document.createElement("script");n.async=!0,n.src="index.js?v="+Date.now(),document.body.appendChild(n)}()</script></body></html>
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>rayweb</title>
+<link rel="icon" href="data:,">
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #12141a;
+    overflow: hidden;
+  }
+  /* canvas pencerenin tamamını kaplar; gerçek çözünürlüğü (backing store)
+     C tarafı devicePixelRatio'ya göre ayarlar */
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    outline: none;
+    background: #12141a;
+  }
+</style>
+</head>
+<body>
+<canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1"></canvas>
+
+<!-- mobile keyboard proxy: taps on canvas focus this hidden input so the OS
+     shows its keyboard; typed characters are fed directly to Raylib / GLFW -->
+<input id="kbtrap" tabindex="-1" type="text" autocapitalize="off" autocorrect="off" autocomplete="off"
+  style="position:absolute; opacity:0; height:1px; width:1px; top:0; left:0;">
+<script>
+(function () {
+  var canvas = document.getElementById('canvas');
+  var kb = document.getElementById('kbtrap');
+
+  function sendChar(code) {
+    if (!code) return;
+    if (typeof GLFW !== 'undefined' && GLFW.active && GLFW.active.charFunc) {
+      try {
+        GLFW.onKeyPress({ charCode: code, ctrlKey: false, metaKey: false });
+      } catch (e) {}
+    }
+  }
+
+  function sendKey(domKeyCode) {
+    if (typeof GLFW !== 'undefined' && GLFW.active) {
+      try {
+        GLFW.onKeyChanged(domKeyCode, 1);
+        setTimeout(function () { GLFW.onKeyChanged(domKeyCode, 0); }, 20);
+      } catch (e) {}
+    }
+  }
+
+  function focusCanvas() {
+    if (canvas && document.activeElement !== kb) {
+      try { canvas.focus(); } catch (e) {}
+    }
+  }
+
+  window.addEventListener('load', focusCanvas);
+  canvas.addEventListener('click', focusCanvas);
+  canvas.addEventListener('mousedown', focusCanvas);
+
+  canvas.addEventListener('touchend', function (e) {
+    if (kb) kb.focus();
+  }, false);
+
+  if (kb) {
+    kb.addEventListener('input', function (e) {
+      var val = kb.value;
+      if (!val) return;
+      for (var i = 0; i < val.length; i++) {
+        sendChar(val.codePointAt(i));
+      }
+      kb.value = '';
+    });
+
+    kb.addEventListener('keydown', function (e) {
+      if (e.key === 'Backspace') {
+        sendKey(8);
+      } else if (e.key === 'Enter') {
+        sendKey(13);
+      } else if (e.key === 'Escape') {
+        sendKey(27);
+      }
+    });
+  }
+
+  var lastHandledTime = 0;
+  var lastHandledChar = 0;
+
+  window.addEventListener('keypress', function (e) {
+    lastHandledTime = Date.now();
+    lastHandledChar = e.charCode || (e.key ? e.key.codePointAt(0) : 0);
+  }, true);
+
+  window.addEventListener('keydown', function (e) {
+    if (e.key && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      var cp = e.key.codePointAt(0);
+      var now = Date.now();
+      setTimeout(function () {
+        if (Date.now() - lastHandledTime > 30 || lastHandledChar !== cp) {
+          sendChar(cp);
+        }
+      }, 0);
+    }
+  }, false);
+})();
+</script>
+
+<script>
+  var Module = {
+    canvas: document.getElementById('canvas'),
+    locateFile: function (path, prefix) {
+      if (path.endsWith('.wasm')) return prefix + path + '?v=' + Date.now();
+      return prefix + path;
+    }
+  };
+
+  /* Sadece gelistirme icin: server.bat derlemeyi bitirince web/.reload
+     dosyasina damga atar, burasi onu gorup sayfayi yeniler.
+     Yayinda .reload dosyasi olmadigi icin hicbir sey yapmaz. */
+  (function () {
+    var local = (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
+    if (!local) return;
+    var seen = null;
+    setInterval(function () {
+      fetch('.reload', { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.text() : null; })
+        .then(function (t) {
+          if (t === null) return;
+          if (seen !== null && t !== seen) location.reload();
+          seen = t;
+        })
+        .catch(function () {});
+    }, 700);
+  })();
+
+  /* Her ziyarette onbellegi asmak icin index.js dinamik zaman damgasiyla yuklenir */
+  (function () {
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'index.js?v=' + Date.now();
+    document.body.appendChild(s);
+  })();
+</script>
+<!-- <script async type="text/javascript" src="index.js"></script> -->
+</body>
+</html>
