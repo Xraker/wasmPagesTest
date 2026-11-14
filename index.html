@@ -144,6 +144,65 @@
     }, 700);
   })();
 
+  /* Yayin (GitHub Pages vb.) icin otomatik guncelleme kontrolu:
+     1) Her 1 saatte bir ve kullanici acik sekmeye geri dondugunde
+        index.wasm / index.html ustbilgilerini (ETag / Last-Modified) kontrol eder.
+     2) Degisiklik varsa ve kullanici aktif test cozmuyorsa sayfayi yeniler;
+        test ortasindaysa test bitene/iptal edilene kadar bekler. */
+  (function () {
+    var local = (location.hostname === 'localhost' || location.hostname === '127.0.0.1');
+    if (local || (location.protocol !== 'http:' && location.protocol !== 'https:')) return;
+
+    var baseVer = null;
+    var lastCheck = 0;
+    var reloading = false;
+    window.__raywebInTest = false;
+    window.__raywebNeedReload = false;
+
+    function safeReload() {
+      if (reloading || window.__raywebInTest) return;
+      reloading = true;
+      fetch(location.pathname || 'index.html', { cache: 'reload' })
+        .catch(function () {})
+        .then(function () { location.reload(); });
+    }
+
+    window.__raywebSetTest = function (active) {
+      window.__raywebInTest = !!active;
+      if (!active && window.__raywebNeedReload) safeReload();
+    };
+
+    function headStamp(url) {
+      return fetch(url, { method: 'HEAD', cache: 'no-store' }).then(function (r) {
+        if (!r.ok) return '';
+        return r.headers.get('etag') || r.headers.get('last-modified') || r.headers.get('content-length') || '';
+      });
+    }
+
+    function checkUpdate() {
+      if (reloading) return;
+      lastCheck = Date.now();
+      Promise.all([headStamp('index.wasm'), headStamp(location.pathname || 'index.html')])
+        .then(function (parts) {
+          var ver = parts[0] + '|' + parts[1];
+          if (ver === '|') return;
+          if (baseVer === null) {
+            baseVer = ver;
+          } else if (ver !== baseVer) {
+            window.__raywebNeedReload = true;
+            if (!window.__raywebInTest) safeReload();
+          }
+        })
+        .catch(function () {});
+    }
+
+    window.addEventListener('load', checkUpdate);
+    setInterval(checkUpdate, 60 * 60 * 1000);
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden && Date.now() - lastCheck >= 60 * 1000) checkUpdate();
+    });
+  })();
+
   /* Her ziyarette onbellegi asmak icin index.js dinamik zaman damgasiyla yuklenir */
   (function () {
     var s = document.createElement('script');

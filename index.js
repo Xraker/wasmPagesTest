@@ -6452,6 +6452,20 @@ var stringToUTF8Array = (str, heap, outIdx, maxBytesToWrite) => {
   
   /** not-@type {!BigUint64Array} */
   var HEAPU64;
+  var _emscripten_run_script = (ptr) => {
+      eval(UTF8ToString(ptr));
+    };
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   /** @suppress{checkTypes} */
   var _emscripten_run_script_int = (ptr) => {
       return eval(UTF8ToString(ptr))|0;
@@ -9705,49 +9719,49 @@ function checkIncomingModuleAPI() {
   ignoredModuleProp('wasmBinary');
 }
 var ASM_CONSTS = {
-  474004: () => { if (document.fullscreenElement) return 1; },  
- 474050: () => { return Module.canvas.width; },  
- 474082: () => { return parseInt(Module.canvas.style.width); },  
- 474130: () => { document.exitFullscreen(); },  
- 474157: () => { setTimeout(function(){ Module.requestFullscreen(false, false); }, 100); },  
- 474229: () => { if (document.fullscreenElement) return 1; },  
- 474275: () => { return Module.canvas.width; },  
- 474307: () => { return screen.width; },  
- 474332: () => { document.exitFullscreen(); },  
- 474359: ($0) => { const canvasId = UTF8ToString($0); setTimeout(function() { Module.requestFullscreen(false, true); setTimeout(function() { document.querySelector(canvasId).style.width="unset"; }, 100); }, 100); },  
- 474553: () => { return window.innerWidth; },  
- 474579: () => { return window.innerHeight; },  
- 474606: () => { if (document.fullscreenElement) return 1; },  
- 474652: () => { return Module.canvas.width; },  
- 474684: () => { return parseInt(Module.canvas.style.width); },  
- 474732: () => { if (document.fullscreenElement) return 1; },  
- 474778: () => { return Module.canvas.width; },  
- 474810: () => { return screen.width; },  
- 474835: () => { return window.innerWidth; },  
- 474861: () => { return window.innerHeight; },  
- 474888: () => { if (document.fullscreenElement) return 1; },  
- 474934: () => { return Module.canvas.width; },  
- 474966: () => { return screen.width; },  
- 474991: () => { document.exitFullscreen(); },  
- 475018: () => { if (document.fullscreenElement) return 1; },  
- 475064: () => { return Module.canvas.width; },  
- 475096: () => { return parseInt(Module.canvas.style.width); },  
- 475144: () => { document.exitFullscreen(); },  
- 475171: ($0) => { Module.canvas.style.opacity = $0; },  
- 475209: () => { return screen.width; },  
- 475234: () => { return screen.height; },  
- 475260: () => { return window.screenX; },  
- 475287: () => { return window.screenY; },  
- 475314: () => { return window.devicePixelRatio; },  
- 475350: ($0) => { navigator.clipboard.writeText(UTF8ToString($0)); },  
- 475403: ($0) => { Module.canvas.style.cursor = UTF8ToString($0); },  
- 475454: () => { Module.canvas.style.cursor = 'none'; },  
- 475491: ($0, $1, $2, $3) => { try { navigator.getGamepads()[$0].vibrationActuator.playEffect('dual-rumble', { startDelay: 0, duration: $3, weakMagnitude: $1, strongMagnitude: $2 }); } catch (e) { try { navigator.getGamepads()[$0].hapticActuators[0].pulse($2, $3); } catch (e) { } } },  
- 475747: ($0) => { Module.canvas.style.cursor = UTF8ToString($0); },  
- 475798: () => { if (document.pointerLockElement) return 1; },  
- 475845: () => { if (document.fullscreenElement) return 1; },  
- 475891: () => { return window.innerWidth; },  
- 475917: () => { return window.innerHeight; }
+  475300: () => { if (document.fullscreenElement) return 1; },  
+ 475346: () => { return Module.canvas.width; },  
+ 475378: () => { return parseInt(Module.canvas.style.width); },  
+ 475426: () => { document.exitFullscreen(); },  
+ 475453: () => { setTimeout(function(){ Module.requestFullscreen(false, false); }, 100); },  
+ 475525: () => { if (document.fullscreenElement) return 1; },  
+ 475571: () => { return Module.canvas.width; },  
+ 475603: () => { return screen.width; },  
+ 475628: () => { document.exitFullscreen(); },  
+ 475655: ($0) => { const canvasId = UTF8ToString($0); setTimeout(function() { Module.requestFullscreen(false, true); setTimeout(function() { document.querySelector(canvasId).style.width="unset"; }, 100); }, 100); },  
+ 475849: () => { return window.innerWidth; },  
+ 475875: () => { return window.innerHeight; },  
+ 475902: () => { if (document.fullscreenElement) return 1; },  
+ 475948: () => { return Module.canvas.width; },  
+ 475980: () => { return parseInt(Module.canvas.style.width); },  
+ 476028: () => { if (document.fullscreenElement) return 1; },  
+ 476074: () => { return Module.canvas.width; },  
+ 476106: () => { return screen.width; },  
+ 476131: () => { return window.innerWidth; },  
+ 476157: () => { return window.innerHeight; },  
+ 476184: () => { if (document.fullscreenElement) return 1; },  
+ 476230: () => { return Module.canvas.width; },  
+ 476262: () => { return screen.width; },  
+ 476287: () => { document.exitFullscreen(); },  
+ 476314: () => { if (document.fullscreenElement) return 1; },  
+ 476360: () => { return Module.canvas.width; },  
+ 476392: () => { return parseInt(Module.canvas.style.width); },  
+ 476440: () => { document.exitFullscreen(); },  
+ 476467: ($0) => { Module.canvas.style.opacity = $0; },  
+ 476505: () => { return screen.width; },  
+ 476530: () => { return screen.height; },  
+ 476556: () => { return window.screenX; },  
+ 476583: () => { return window.screenY; },  
+ 476610: () => { return window.devicePixelRatio; },  
+ 476646: ($0) => { navigator.clipboard.writeText(UTF8ToString($0)); },  
+ 476699: ($0) => { Module.canvas.style.cursor = UTF8ToString($0); },  
+ 476750: () => { Module.canvas.style.cursor = 'none'; },  
+ 476787: ($0, $1, $2, $3) => { try { navigator.getGamepads()[$0].vibrationActuator.playEffect('dual-rumble', { startDelay: 0, duration: $3, weakMagnitude: $1, strongMagnitude: $2 }); } catch (e) { try { navigator.getGamepads()[$0].hapticActuators[0].pulse($2, $3); } catch (e) { } } },  
+ 477043: ($0) => { Module.canvas.style.cursor = UTF8ToString($0); },  
+ 477094: () => { if (document.pointerLockElement) return 1; },  
+ 477141: () => { if (document.fullscreenElement) return 1; },  
+ 477187: () => { return window.innerWidth; },  
+ 477213: () => { return window.innerHeight; }
 };
 function DownloadBytes(name,data,len) { var bytes = HEAPU8.slice(data, data + len); var url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' })); var a = document.createElement('a'); a.href = url; a.download = UTF8ToString(name); document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 5000); }
 function SetCanvasIdJs(out,outSize) { var canvasId = "#" + Module.canvas.id; stringToUTF8(canvasId, out, outSize); }
@@ -10177,6 +10191,8 @@ var wasmImports = {
   emscripten_idb_async_store: _emscripten_idb_async_store,
   /** @export */
   emscripten_resize_heap: _emscripten_resize_heap,
+  /** @export */
+  emscripten_run_script: _emscripten_run_script,
   /** @export */
   emscripten_run_script_int: _emscripten_run_script_int,
   /** @export */
