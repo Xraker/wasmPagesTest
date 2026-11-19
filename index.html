@@ -94,25 +94,57 @@
     });
   }
 
-  var lastHandledTime = 0;
-  var lastHandledChar = 0;
+  var pendingKeys = [];
+  var suppressRepeatKeypress = false;
 
   window.addEventListener('keypress', function (e) {
-    lastHandledTime = Date.now();
-    lastHandledChar = e.charCode || (e.key ? e.key.codePointAt(0) : 0);
+    if (window.__raywebInTest && (e.repeat || suppressRepeatKeypress)) {
+      suppressRepeatKeypress = false;
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      return;
+    }
+    suppressRepeatKeypress = false;
+    var cp = e.charCode || (e.key ? e.key.codePointAt(0) : 0);
+    for (var i = 0; i < pendingKeys.length; i++) {
+      if (!pendingKeys[i].handled && pendingKeys[i].cp === cp) {
+        pendingKeys[i].handled = true;
+        break;
+      }
+    }
   }, true);
 
   window.addEventListener('keydown', function (e) {
+    if (e.target === kb || e.isComposing) return;
     if (e.key && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      if (window.__raywebInTest && e.repeat) {
+        suppressRepeatKeypress = true;
+        return;
+      }
+      suppressRepeatKeypress = false;
       var cp = e.key.codePointAt(0);
-      var now = Date.now();
+      var entry = { cp: cp, handled: false };
+      pendingKeys.push(entry);
       setTimeout(function () {
-        if (Date.now() - lastHandledTime > 30 || lastHandledChar !== cp) {
+        var idx = pendingKeys.indexOf(entry);
+        if (idx !== -1) pendingKeys.splice(idx, 1);
+        if (!entry.handled) {
           sendChar(cp);
         }
       }, 0);
+    } else if (!e.repeat) {
+      suppressRepeatKeypress = false;
     }
   }, false);
+
+  window.addEventListener('keyup', function () {
+    suppressRepeatKeypress = false;
+  }, true);
+
+  window.addEventListener('blur', function () {
+    suppressRepeatKeypress = false;
+    pendingKeys.length = 0;
+  });
 })();
 </script>
 
@@ -144,6 +176,12 @@
     }, 700);
   })();
 
+  window.__raywebInTest = false;
+  window.__raywebSetTest = function (active) {
+    window.__raywebInTest = !!active;
+    if (window.__raywebOnTestChange) window.__raywebOnTestChange(window.__raywebInTest);
+  };
+
   /* Yayin (GitHub Pages vb.) icin otomatik guncelleme kontrolu:
      1) Her 1 saatte bir ve kullanici acik sekmeye geri dondugunde
         index.wasm / index.html ustbilgilerini (ETag / Last-Modified) kontrol eder.
@@ -156,7 +194,6 @@
     var baseVer = null;
     var lastCheck = 0;
     var reloading = false;
-    window.__raywebInTest = false;
     window.__raywebNeedReload = false;
 
     function safeReload() {
@@ -167,8 +204,7 @@
         .then(function () { location.reload(); });
     }
 
-    window.__raywebSetTest = function (active) {
-      window.__raywebInTest = !!active;
+    window.__raywebOnTestChange = function (active) {
       if (!active && window.__raywebNeedReload) safeReload();
     };
 

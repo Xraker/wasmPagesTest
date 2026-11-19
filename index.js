@@ -7759,6 +7759,10 @@ var stringToUTF8Array = (str, heap, outIdx, maxBytesToWrite) => {
 
   var _glBindBuffer = _emscripten_glBindBuffer;
 
+  var _glBindFramebuffer = _emscripten_glBindFramebuffer;
+
+  var _glBindRenderbuffer = _emscripten_glBindRenderbuffer;
+
   var _glBindTexture = _emscripten_glBindTexture;
 
   var _glBlendFunc = _emscripten_glBlendFunc;
@@ -7766,6 +7770,8 @@ var stringToUTF8Array = (str, heap, outIdx, maxBytesToWrite) => {
   var _glBufferData = _emscripten_glBufferData;
 
   var _glBufferSubData = _emscripten_glBufferSubData;
+
+  var _glCheckFramebufferStatus = _emscripten_glCheckFramebufferStatus;
 
   var _glClear = _emscripten_glClear;
 
@@ -7785,7 +7791,11 @@ var stringToUTF8Array = (str, heap, outIdx, maxBytesToWrite) => {
 
   var _glDeleteBuffers = _emscripten_glDeleteBuffers;
 
+  var _glDeleteFramebuffers = _emscripten_glDeleteFramebuffers;
+
   var _glDeleteProgram = _emscripten_glDeleteProgram;
+
+  var _glDeleteRenderbuffers = _emscripten_glDeleteRenderbuffers;
 
   var _glDeleteShader = _emscripten_glDeleteShader;
 
@@ -7807,15 +7817,25 @@ var stringToUTF8Array = (str, heap, outIdx, maxBytesToWrite) => {
 
   var _glEnableVertexAttribArray = _emscripten_glEnableVertexAttribArray;
 
+  var _glFramebufferRenderbuffer = _emscripten_glFramebufferRenderbuffer;
+
+  var _glFramebufferTexture2D = _emscripten_glFramebufferTexture2D;
+
   var _glFrontFace = _emscripten_glFrontFace;
 
   var _glGenBuffers = _emscripten_glGenBuffers;
+
+  var _glGenFramebuffers = _emscripten_glGenFramebuffers;
+
+  var _glGenRenderbuffers = _emscripten_glGenRenderbuffers;
 
   var _glGenTextures = _emscripten_glGenTextures;
 
   var _glGetAttribLocation = _emscripten_glGetAttribLocation;
 
   var _glGetFloatv = _emscripten_glGetFloatv;
+
+  var _glGetFramebufferAttachmentParameteriv = _emscripten_glGetFramebufferAttachmentParameteriv;
 
   var _glGetProgramInfoLog = _emscripten_glGetProgramInfoLog;
 
@@ -7834,6 +7854,8 @@ var stringToUTF8Array = (str, heap, outIdx, maxBytesToWrite) => {
   var _glPixelStorei = _emscripten_glPixelStorei;
 
   var _glReadPixels = _emscripten_glReadPixels;
+
+  var _glRenderbufferStorage = _emscripten_glRenderbufferStorage;
 
   var _glScissor = _emscripten_glScissor;
 
@@ -9721,51 +9743,51 @@ function checkIncomingModuleAPI() {
   ignoredModuleProp('wasmBinary');
 }
 var ASM_CONSTS = {
-  476423: () => { if (document.fullscreenElement) return 1; },  
- 476469: () => { return Module.canvas.width; },  
- 476501: () => { return parseInt(Module.canvas.style.width); },  
- 476549: () => { document.exitFullscreen(); },  
- 476576: () => { setTimeout(function(){ Module.requestFullscreen(false, false); }, 100); },  
- 476648: () => { if (document.fullscreenElement) return 1; },  
- 476694: () => { return Module.canvas.width; },  
- 476726: () => { return screen.width; },  
- 476751: () => { document.exitFullscreen(); },  
- 476778: ($0) => { const canvasId = UTF8ToString($0); setTimeout(function() { Module.requestFullscreen(false, true); setTimeout(function() { document.querySelector(canvasId).style.width="unset"; }, 100); }, 100); },  
- 476972: () => { return window.innerWidth; },  
- 476998: () => { return window.innerHeight; },  
- 477025: () => { if (document.fullscreenElement) return 1; },  
- 477071: () => { return Module.canvas.width; },  
- 477103: () => { return parseInt(Module.canvas.style.width); },  
- 477151: () => { if (document.fullscreenElement) return 1; },  
- 477197: () => { return Module.canvas.width; },  
- 477229: () => { return screen.width; },  
- 477254: () => { return window.innerWidth; },  
- 477280: () => { return window.innerHeight; },  
- 477307: () => { if (document.fullscreenElement) return 1; },  
- 477353: () => { return Module.canvas.width; },  
- 477385: () => { return screen.width; },  
- 477410: () => { document.exitFullscreen(); },  
- 477437: () => { if (document.fullscreenElement) return 1; },  
- 477483: () => { return Module.canvas.width; },  
- 477515: () => { return parseInt(Module.canvas.style.width); },  
- 477563: () => { document.exitFullscreen(); },  
- 477590: ($0) => { Module.canvas.style.opacity = $0; },  
- 477628: () => { return screen.width; },  
- 477653: () => { return screen.height; },  
- 477679: () => { return window.screenX; },  
- 477706: () => { return window.screenY; },  
- 477733: () => { return window.devicePixelRatio; },  
- 477769: ($0) => { navigator.clipboard.writeText(UTF8ToString($0)); },  
- 477822: ($0) => { Module.canvas.style.cursor = UTF8ToString($0); },  
- 477873: () => { Module.canvas.style.cursor = 'none'; },  
- 477910: ($0, $1, $2, $3) => { try { navigator.getGamepads()[$0].vibrationActuator.playEffect('dual-rumble', { startDelay: 0, duration: $3, weakMagnitude: $1, strongMagnitude: $2 }); } catch (e) { try { navigator.getGamepads()[$0].hapticActuators[0].pulse($2, $3); } catch (e) { } } },  
- 478166: ($0) => { Module.canvas.style.cursor = UTF8ToString($0); },  
- 478217: () => { if (document.pointerLockElement) return 1; },  
- 478264: () => { if (document.fullscreenElement) return 1; },  
- 478310: () => { return window.innerWidth; },  
- 478336: () => { return window.innerHeight; }
+  477306: () => { if (document.fullscreenElement) return 1; },  
+ 477352: () => { return Module.canvas.width; },  
+ 477384: () => { return parseInt(Module.canvas.style.width); },  
+ 477432: () => { document.exitFullscreen(); },  
+ 477459: () => { setTimeout(function(){ Module.requestFullscreen(false, false); }, 100); },  
+ 477531: () => { if (document.fullscreenElement) return 1; },  
+ 477577: () => { return Module.canvas.width; },  
+ 477609: () => { return screen.width; },  
+ 477634: () => { document.exitFullscreen(); },  
+ 477661: ($0) => { const canvasId = UTF8ToString($0); setTimeout(function() { Module.requestFullscreen(false, true); setTimeout(function() { document.querySelector(canvasId).style.width="unset"; }, 100); }, 100); },  
+ 477855: () => { return window.innerWidth; },  
+ 477881: () => { return window.innerHeight; },  
+ 477908: () => { if (document.fullscreenElement) return 1; },  
+ 477954: () => { return Module.canvas.width; },  
+ 477986: () => { return parseInt(Module.canvas.style.width); },  
+ 478034: () => { if (document.fullscreenElement) return 1; },  
+ 478080: () => { return Module.canvas.width; },  
+ 478112: () => { return screen.width; },  
+ 478137: () => { return window.innerWidth; },  
+ 478163: () => { return window.innerHeight; },  
+ 478190: () => { if (document.fullscreenElement) return 1; },  
+ 478236: () => { return Module.canvas.width; },  
+ 478268: () => { return screen.width; },  
+ 478293: () => { document.exitFullscreen(); },  
+ 478320: () => { if (document.fullscreenElement) return 1; },  
+ 478366: () => { return Module.canvas.width; },  
+ 478398: () => { return parseInt(Module.canvas.style.width); },  
+ 478446: () => { document.exitFullscreen(); },  
+ 478473: ($0) => { Module.canvas.style.opacity = $0; },  
+ 478511: () => { return screen.width; },  
+ 478536: () => { return screen.height; },  
+ 478562: () => { return window.screenX; },  
+ 478589: () => { return window.screenY; },  
+ 478616: () => { return window.devicePixelRatio; },  
+ 478652: ($0) => { navigator.clipboard.writeText(UTF8ToString($0)); },  
+ 478705: ($0) => { Module.canvas.style.cursor = UTF8ToString($0); },  
+ 478756: () => { Module.canvas.style.cursor = 'none'; },  
+ 478793: ($0, $1, $2, $3) => { try { navigator.getGamepads()[$0].vibrationActuator.playEffect('dual-rumble', { startDelay: 0, duration: $3, weakMagnitude: $1, strongMagnitude: $2 }); } catch (e) { try { navigator.getGamepads()[$0].hapticActuators[0].pulse($2, $3); } catch (e) { } } },  
+ 479049: ($0) => { Module.canvas.style.cursor = UTF8ToString($0); },  
+ 479100: () => { if (document.pointerLockElement) return 1; },  
+ 479147: () => { if (document.fullscreenElement) return 1; },  
+ 479193: () => { return window.innerWidth; },  
+ 479219: () => { return window.innerHeight; }
 };
-function DownloadBytes(name,data,len) { var bytes = HEAPU8.slice(data, data + len); var url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' })); var a = document.createElement('a'); a.href = url; a.download = UTF8ToString(name); document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 5000); }
+function DownloadBytes(name,mime,data,len) { var bytes = HEAPU8.slice(data, data + len); var url = URL.createObjectURL(new Blob([bytes], { type: UTF8ToString(mime) })); var a = document.createElement('a'); a.href = url; a.download = UTF8ToString(name); document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 5000); }
 function NotifyWebFrame(ready,w,h) { window.__raywebReady = ready; window.__raywebW = w; window.__raywebH = h; window.__raywebFrame = (window.__raywebFrame || 0) + 1; }
 function SetCanvasIdJs(out,outSize) { var canvasId = "#" + Module.canvas.id; stringToUTF8(canvasId, out, outSize); }
 function __asyncjs__RequestClipboardData() { return Asyncify.handleAsync(async () => { if (navigator.clipboard && window.isSecureContext) { let items = await navigator.clipboard.read(); for (const item of items) { if (item.types.includes("text/plain")) { const blob = await item.getType("text/plain"); const text = await blob.text(); window._lastClipboardString = text; } else if (item.types.find(t => t.startsWith("image/"))) { const blob = await item.getType(item.types.find(t => t.startsWith("image/"))); const bitmap = await createImageBitmap(blob); const canvas = document.createElement('canvas'); canvas.width = bitmap.width; canvas.height = bitmap.height; const ctx = canvas.getContext('2d'); ctx.drawImage(bitmap, 0, 0); const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height).data; window._lastImgWidth = canvas.width; window._lastImgHeight = canvas.height; window._lastImgData = imgData; } } } else console.warn("Clipboard read() requires HTTPS/Localhost"); }); }
@@ -10255,6 +10277,10 @@ var wasmImports = {
   /** @export */
   glBindBuffer: _glBindBuffer,
   /** @export */
+  glBindFramebuffer: _glBindFramebuffer,
+  /** @export */
+  glBindRenderbuffer: _glBindRenderbuffer,
+  /** @export */
   glBindTexture: _glBindTexture,
   /** @export */
   glBlendFunc: _glBlendFunc,
@@ -10262,6 +10288,8 @@ var wasmImports = {
   glBufferData: _glBufferData,
   /** @export */
   glBufferSubData: _glBufferSubData,
+  /** @export */
+  glCheckFramebufferStatus: _glCheckFramebufferStatus,
   /** @export */
   glClear: _glClear,
   /** @export */
@@ -10281,7 +10309,11 @@ var wasmImports = {
   /** @export */
   glDeleteBuffers: _glDeleteBuffers,
   /** @export */
+  glDeleteFramebuffers: _glDeleteFramebuffers,
+  /** @export */
   glDeleteProgram: _glDeleteProgram,
+  /** @export */
+  glDeleteRenderbuffers: _glDeleteRenderbuffers,
   /** @export */
   glDeleteShader: _glDeleteShader,
   /** @export */
@@ -10303,15 +10335,25 @@ var wasmImports = {
   /** @export */
   glEnableVertexAttribArray: _glEnableVertexAttribArray,
   /** @export */
+  glFramebufferRenderbuffer: _glFramebufferRenderbuffer,
+  /** @export */
+  glFramebufferTexture2D: _glFramebufferTexture2D,
+  /** @export */
   glFrontFace: _glFrontFace,
   /** @export */
   glGenBuffers: _glGenBuffers,
+  /** @export */
+  glGenFramebuffers: _glGenFramebuffers,
+  /** @export */
+  glGenRenderbuffers: _glGenRenderbuffers,
   /** @export */
   glGenTextures: _glGenTextures,
   /** @export */
   glGetAttribLocation: _glGetAttribLocation,
   /** @export */
   glGetFloatv: _glGetFloatv,
+  /** @export */
+  glGetFramebufferAttachmentParameteriv: _glGetFramebufferAttachmentParameteriv,
   /** @export */
   glGetProgramInfoLog: _glGetProgramInfoLog,
   /** @export */
@@ -10330,6 +10372,8 @@ var wasmImports = {
   glPixelStorei: _glPixelStorei,
   /** @export */
   glReadPixels: _glReadPixels,
+  /** @export */
+  glRenderbufferStorage: _glRenderbufferStorage,
   /** @export */
   glScissor: _glScissor,
   /** @export */
